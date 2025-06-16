@@ -8,3 +8,8 @@ fun formatDate(date: Date): String {
     val format = SimpleDateFormat("EEEE, dd MMMM", Locale("ru"))
     return format.format(date)
 }
+
+fun formatForecastDate(date: Date): String {
+    val format = SimpleDateFormat("EEEE, dd MMMM\nkk:mm", Locale("ru"))
+    return format.format(date)
+}

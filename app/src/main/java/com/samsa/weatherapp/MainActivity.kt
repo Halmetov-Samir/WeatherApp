@@ -10,7 +10,6 @@ import androidx.core.view.WindowInsetsCompat
 import com.samsa.weatherapp.common.Common
 import com.samsa.weatherapp.databinding.ActivityMainBinding
 import com.samsa.weatherapp.interfaces.RetrofitServices
-import com.samsa.weatherapp.model.Weather
 import com.samsa.weatherapp.model.WeatherData
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -23,7 +22,11 @@ import com.samsa.weatherapp.locationutils.LocationHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import android.Manifest
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.samsa.weatherapp.utils.formatDate
+import com.samsa.weatherapp.viewmodel.WeatherViewModel
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import java.util.Date
@@ -33,6 +36,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var mService: RetrofitServices
     private lateinit var locationHelper: LocationHelper
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
+    private lateinit var weatherViewModel: WeatherViewModel
+    private var rcAdapter = ForecastAdapter(this@MainActivity)
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 20051306
@@ -46,8 +51,61 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         initBinding()
 
+        weatherViewModel = ViewModelProvider(this)[WeatherViewModel::class.java]
+
         locationHelper = LocationHelper(this)
         mService = Common.retrofitService
+
+        weatherViewModel.forecastListLiveData.observe(this, Observer { fData ->
+            if(fData != null) {
+                rcAdapter.submitList(fData)
+            }
+            else {
+                rcAdapter.submitList(emptyList())
+            }
+        })
+
+        weatherViewModel.currentWeatherData.observe(this, Observer { wData ->
+            if (wData != null) {
+                binding.tvDescription.text = wData.weather?.get(0)?.description.toString()
+                binding.tvTemp.text = "+${wData.main?.temp}℃"
+                binding.tvFeelsLike.text = "+${wData.main?.temp}℃"
+                binding.tvCity.text = wData.name.toString()
+                binding.imageView2.setImageResource(
+                    resources.getIdentifier(
+                        "ic_${
+                            wData.weather?.get(
+                                0
+                            )?.icon
+                        }", "drawable", packageName
+                    )
+                )
+
+                binding.tvWind.text = "${wData.wind?.speed}м/с"
+                binding.tvDate.text = formatDate(Date())
+                binding.tvHumidity.text = "${wData.main?.humidity}%"
+
+                if ((Date().time % 86400) / 60 > 10 && (Date().time % 86400) / 60 < 20) {
+                    binding.main.setBackgroundResource(
+                        resources.getIdentifier(
+                            "ic_day",
+                            "drawable",
+                            packageName
+                        )
+                    )
+                } else {
+                    binding.main.setBackgroundResource(
+                        resources.getIdentifier(
+                            "ic_night",
+                            "drawable",
+                            packageName
+                        )
+                    )
+                }
+            }
+            else
+                defaultInit()
+        })
 
         requestLocationAndGetLocation()
     }
@@ -84,8 +142,6 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 getLocation()
-            } else {
-                Toast.makeText(this, "Разрешение на получение местоположения отклонено", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -94,10 +150,7 @@ class MainActivity : AppCompatActivity() {
         coroutineScope.launch {
             locationHelper.getSingleLocation(
                 onSuccess = { latitude, longitude ->
-                    val locationString = "Широта: $latitude, Долгота: $longitude"
-                    Toast.makeText(this@MainActivity, "Местоположение получено! $locationString", Toast.LENGTH_LONG).show()
-
-                    getWeatherA(latitude, longitude)
+                    weatherViewModel.loadWeatherData(mService, latitude, longitude)
                 },
                 onFailure = { e ->
                     Toast.makeText(this@MainActivity, "Ошибка получения местоположения: ${e.message}", Toast.LENGTH_SHORT).show()
@@ -109,41 +162,6 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         coroutineScope.cancel()
-    }
-
-    private fun getWeatherA(lat: Double, lon: Double) {
-        mService.getWeather(lat, lon, "bea73937fb77f56dfd8f3f1717ccb31d", "metric", "ru").enqueue(object: Callback<WeatherData> {
-            override fun onFailure(call: Call<WeatherData>, t: Throwable) {
-                defaultInit()
-                Log.d("ReqFail", "${t.message} || ${t.cause}")
-            }
-
-            override fun onResponse(call: Call<WeatherData>, response: Response<WeatherData>) {
-                if (response.body() != null) {
-                    Log.d("Response", "${response.body()}")
-
-                    binding.tvDescription.text = response.body()!!.weather?.get(0)?.description.toString()
-                    binding.tvTemp.text = "+${response.body()?.main?.temp}℃"
-                    binding.tvFeelsLike.text = "+${response.body()?.main?.temp}℃"
-                    binding.tvCity.text = response.body()?.name.toString()
-                    binding.imageView2.setImageResource(resources.getIdentifier("ic_${response.body()?.weather?.get(0)?.icon}", "drawable", packageName))
-
-                    binding.tvWind.text = "${response.body()?.wind?.speed}м/с"
-                    binding.tvDate.text = formatDate(Date())
-                    binding.tvHumidity.text = "${response.body()?.main?.humidity}%"
-
-                    if ((Date().time % 86400) / 60 > 10 && (Date().time % 86400) < 20) {
-                        binding.main.setBackgroundResource(resources.getIdentifier("ic_day", "drawable", packageName))
-                    }
-                    else {
-                        binding.main.setBackgroundResource(resources.getIdentifier("ic_night", "drawable", packageName))
-                    }
-                }
-                else
-                    defaultInit()
-                //Log.d("ReqFailNot", "msg: ${response.body()?.toString()} || ${response.message()}")
-            }
-        })
     }
 
     private fun defaultInit() {
@@ -169,6 +187,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initBinding() {
+        binding.RecycleForecast.layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
+        binding.RecycleForecast.adapter = rcAdapter
         defaultInit()
     }
 }
