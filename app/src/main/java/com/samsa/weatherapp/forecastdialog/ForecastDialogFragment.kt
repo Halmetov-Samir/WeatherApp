@@ -55,7 +55,7 @@ class ForecastDialogFragment : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        val width = (resources.displayMetrics.widthPixels * 0.9).toInt()  // 90% ширины экрана
+        val width = (resources.displayMetrics.widthPixels * 0.85).toInt()
         val height = ViewGroup.LayoutParams.WRAP_CONTENT
 
         dialog?.window?.setLayout(width, height)

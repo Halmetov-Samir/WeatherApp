@@ -46,7 +46,7 @@ class ForecastCardAdapter : ListAdapter<ForecastItem, ForecastCardAdapter.Foreca
 
     class DiffCallback : DiffUtil.ItemCallback<ForecastItem>() {
         override fun areItemsTheSame(oldItem: ForecastItem, newItem: ForecastItem): Boolean {
-            return oldItem.dt == newItem.dt // или id, если есть
+            return oldItem.dt == newItem.dt
         }
 
         override fun areContentsTheSame(oldItem: ForecastItem, newItem: ForecastItem): Boolean {

@@ -22,10 +22,8 @@ import java.util.Date
 
 class WeatherViewModel : ViewModel() {
 
-    //val groupedForecastsLiveData = MutableLiveData<Map<String, List<ForecastItem>>>()
     val dayDataListLiveData = MutableLiveData<List<DayData>>()
-    val currentWeatherData = MutableLiveData<WeatherData?>() // Для одиночных данных
-    //val forecastListLiveData = MutableLiveData<List<ForecastItem>?>() // Для списка прогнозов
+    val currentWeatherData = MutableLiveData<WeatherData?>()
 
     fun loadWeatherData(mService: RetrofitServices, lat: Double, lon: Double) {
         CoroutineScope(Dispatchers.Main).launch {
@@ -51,7 +49,6 @@ class WeatherViewModel : ViewModel() {
                     response.body()?.copy()?.let {
                         dayDataListLiveData.value = convertMapToList(groupForecastItemsByDate(it.list))
                     }
-                    //forecastListLiveData.value = response.body()?.copy()?.list
                 }
                 else
                     dayDataListLiveData.value = emptyList()
@@ -81,7 +78,6 @@ class WeatherViewModel : ViewModel() {
                 }
                 else
                     currentWeatherData.value = null
-                //Log.d("ReqFailNot", "msg: ${response.body()?.toString()} || ${response.message()}")
             }
         })
     }
