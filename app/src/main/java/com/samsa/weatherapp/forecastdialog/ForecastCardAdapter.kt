@@ -7,8 +7,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.samsa.weatherapp.databinding.SampleForecastCardBinding
 import com.samsa.weatherapp.model.ForecastItem
-import com.samsa.weatherapp.utils.dayDataFormatDate
-import com.samsa.weatherapp.utils.formatForecastDateToTime
 import com.samsa.weatherapp.utils.formatTime
 
 class ForecastCardAdapter : ListAdapter<ForecastItem, ForecastCardAdapter.ForecastViewHolder>(DiffCallback()) {

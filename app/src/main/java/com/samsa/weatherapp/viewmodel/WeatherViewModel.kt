@@ -9,16 +9,13 @@ import com.samsa.weatherapp.model.ForecastItem
 import com.samsa.weatherapp.model.ForecastResponse
 import com.samsa.weatherapp.model.WeatherData
 import com.samsa.weatherapp.model.groupForecastItemsByDate
-import com.samsa.weatherapp.utils.formatDate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.json.Json
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.Date
 
 class WeatherViewModel : ViewModel() {
 
