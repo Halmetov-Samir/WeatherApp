@@ -6,4 +6,13 @@
     </style>
 
     <style name="Theme.WeatherApp" parent="Base.Theme.WeatherApp" />
+
+    <style name="TransparentBackgroundDialog" parent="Theme.MaterialComponents.DayNight.Dialog">
+        <!-- Прозрачный фон диалога -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+
+        <!-- Включено затемнение фона -->
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.5</item> <!-- Можешь менять степень затемнения -->
+    </style>
 </resources>

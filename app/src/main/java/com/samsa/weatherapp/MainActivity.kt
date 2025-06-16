@@ -25,6 +25,7 @@ import android.Manifest
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.samsa.weatherapp.forecastdialog.ForecastDialogFragment
 import com.samsa.weatherapp.utils.formatDate
 import com.samsa.weatherapp.viewmodel.WeatherViewModel
 import kotlinx.coroutines.cancel
@@ -37,7 +38,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var locationHelper: LocationHelper
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
     private lateinit var weatherViewModel: WeatherViewModel
-    private var rcAdapter = ForecastAdapter(this@MainActivity)
+    private lateinit var rcAdapter: ForecastAdapter
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 20051306
@@ -47,6 +48,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
+        rcAdapter = ForecastAdapter(this, supportFragmentManager)
 
         setContentView(binding.root)
         initBinding()
@@ -56,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         locationHelper = LocationHelper(this)
         mService = Common.retrofitService
 
-        weatherViewModel.forecastListLiveData.observe(this, Observer { fData ->
+        weatherViewModel.dayDataListLiveData.observe(this, Observer { fData ->
             if(fData != null) {
                 rcAdapter.submitList(fData)
             }
@@ -69,7 +71,7 @@ class MainActivity : AppCompatActivity() {
             if (wData != null) {
                 binding.tvDescription.text = wData.weather?.get(0)?.description.toString()
                 binding.tvTemp.text = "+${wData.main?.temp}℃"
-                binding.tvFeelsLike.text = "+${wData.main?.temp}℃"
+                binding.tvFeelsLike.text = "+${wData.main?.feels_like}℃"
                 binding.tvCity.text = wData.name.toString()
                 binding.imageView2.setImageResource(
                     resources.getIdentifier(
