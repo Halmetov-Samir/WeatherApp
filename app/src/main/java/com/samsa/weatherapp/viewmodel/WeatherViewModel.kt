@@ -4,9 +4,11 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.samsa.weatherapp.interfaces.RetrofitServices
+import com.samsa.weatherapp.model.DayData
 import com.samsa.weatherapp.model.ForecastItem
 import com.samsa.weatherapp.model.ForecastResponse
 import com.samsa.weatherapp.model.WeatherData
+import com.samsa.weatherapp.model.groupForecastItemsByDate
 import com.samsa.weatherapp.utils.formatDate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,8 +22,10 @@ import java.util.Date
 
 class WeatherViewModel : ViewModel() {
 
+    //val groupedForecastsLiveData = MutableLiveData<Map<String, List<ForecastItem>>>()
+    val dayDataListLiveData = MutableLiveData<List<DayData>>()
     val currentWeatherData = MutableLiveData<WeatherData?>() // Для одиночных данных
-    val forecastListLiveData = MutableLiveData<List<ForecastItem>?>() // Для списка прогнозов
+    //val forecastListLiveData = MutableLiveData<List<ForecastItem>?>() // Для списка прогнозов
 
     fun loadWeatherData(mService: RetrofitServices, lat: Double, lon: Double) {
         CoroutineScope(Dispatchers.Main).launch {
@@ -36,7 +40,7 @@ class WeatherViewModel : ViewModel() {
         mService.getForecast(lat, lon, "bea73937fb77f56dfd8f3f1717ccb31d", "metric", "ru").enqueue(object:
             Callback<ForecastResponse> {
             override fun onFailure(call: Call<ForecastResponse>, t: Throwable) {
-                forecastListLiveData.value = emptyList()
+                dayDataListLiveData.value = emptyList()
                 Log.d("ReqFail", "${t.message} || ${t.cause}")
             }
 
@@ -44,12 +48,21 @@ class WeatherViewModel : ViewModel() {
                 if (response.body() != null) {
                     Log.d("Response", "${response.body()}")
 
-                    forecastListLiveData.value = response.body()?.copy()?.list
+                    response.body()?.copy()?.let {
+                        dayDataListLiveData.value = convertMapToList(groupForecastItemsByDate(it.list))
+                    }
+                    //forecastListLiveData.value = response.body()?.copy()?.list
                 }
                 else
-                    forecastListLiveData.value = emptyList()
+                    dayDataListLiveData.value = emptyList()
             }
         })
+    }
+
+    private fun convertMapToList(groupedForecasts: Map<String, List<ForecastItem>>): List<DayData> {
+        return groupedForecasts.map { (date, forecastItems) ->
+            DayData(date, forecastItems)
+        }
     }
 
     private fun getWeatherA(mService: RetrofitServices, lat: Double, lon: Double) {

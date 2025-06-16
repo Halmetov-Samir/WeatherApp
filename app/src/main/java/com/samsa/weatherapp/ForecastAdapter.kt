@@ -5,47 +5,57 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.samsa.weatherapp.databinding.SampleWeatherCardBinding
+import com.samsa.weatherapp.forecastdialog.ForecastDialogFragment
+import com.samsa.weatherapp.model.DayData
 import com.samsa.weatherapp.model.ForecastItem
+import com.samsa.weatherapp.utils.dayDataFormatDate
 import com.samsa.weatherapp.utils.formatDate
 import com.samsa.weatherapp.utils.formatForecastDate
+import com.samsa.weatherapp.utils.parseDateToTimestamp
 import java.util.Date
 
-class ForecastAdapter(private val cont: Context): RecyclerView.Adapter<ForecastAdapter.ForecastHolder>() {
+class ForecastAdapter(private val cont: Context, private val fragmentManager: FragmentManager): RecyclerView.Adapter<ForecastAdapter.ForecastHolder>() {
     private val differ = AsyncListDiffer(this, DiffCallback)
 
-    fun submitList(newList: List<ForecastItem>?) {
+    fun submitList(newList: List<DayData>) {
         differ.submitList(newList)
     }
 
     companion object {
-        private val DiffCallback = object : DiffUtil.ItemCallback<ForecastItem>() {
-            override fun areItemsTheSame(oldItem: ForecastItem, newItem: ForecastItem): Boolean {
-                return oldItem.dt == newItem.dt
+        private val DiffCallback = object : DiffUtil.ItemCallback<DayData>() {
+            override fun areItemsTheSame(oldItem: DayData, newItem: DayData): Boolean {
+                return oldItem.date == newItem.date
             }
 
-            override fun areContentsTheSame(oldItem: ForecastItem, newItem: ForecastItem): Boolean {
+            override fun areContentsTheSame(oldItem: DayData, newItem: DayData): Boolean {
                 return oldItem == newItem
             }
         }
     }
 
     inner class ForecastHolder(val binding: SampleWeatherCardBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(fData: ForecastItem) = with(binding) {
-            tvForecastTemp.text = "+${fData.main?.temp}℃"
-            tvWeek.text = formatForecastDate(Date(fData.dt!!))
+        fun bind(fData: DayData) = with(binding) {
+            var middleTemp = 0.0
+            fData.forecastItems.forEach { middleTemp += it.main!!.temp!! }
+            middleTemp /= fData.forecastItems.size
 
-            binding.imageView.setImageResource(
+            tvForecastTemp.text = "+%.1f℃".format(middleTemp)
+            tvWeek.text = dayDataFormatDate(fData.date)
+            imageView.setImageResource(
                 cont.resources.getIdentifier(
                     "ic_${
-                        fData.weather?.get(
+                        fData.forecastItems.get(fData.forecastItems.size/2).weather?.get(
                             0
-                        )?.icon
-                    }", "drawable", cont.packageName)
-            )
+                        )?.icon}", "drawable", cont.packageName))
+            clClicableElement.setOnClickListener {
+                val dialog = ForecastDialogFragment.newInstance(ArrayList(fData.forecastItems))
+                dialog.show(fragmentManager, "ForecastDialog")
+            }
         }
     }
 
