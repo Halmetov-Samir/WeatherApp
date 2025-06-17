@@ -16,7 +16,7 @@ class ForecastCardAdapter : ListAdapter<ForecastItem, ForecastCardAdapter.Foreca
 
         fun bind(item: ForecastItem) {
             binding.tvForecastCardWeek.text = formatTime(item.dt_txt!!)
-            binding.tvForecastCardTemp.text = "${item.main?.temp ?: 0}°C"
+            binding.tvForecastCardTemp.text = "+${item.main?.temp ?: 0}℃"
             binding.tvForecastCardWind.text = "${item.wind?.speed ?: 0}м/с"
             binding.tvForecastCardHumidity.text = "${item.main?.humidity ?: 0}%"
 
