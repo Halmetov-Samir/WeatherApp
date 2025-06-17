@@ -26,7 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_margin="30dp"
+                android:layout_margin="10dp"
                 android:backgroundTint="#FFFFFF"
                 android:padding="5dp"
                 app:cardBackgroundColor="#FFFFFF"
@@ -35,8 +35,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="5dp">
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/tvCity"
@@ -65,133 +64,139 @@
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
-                    <LinearLayout
+                    <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginBottom="20dp"
                         android:layout_weight="0"
-                        android:orientation="horizontal"
-                        android:padding="10dp">
+                        android:backgroundTint="#67CFFF"
+                        app:cardCornerRadius="0dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:padding="5dp">
+                            android:layout_weight="0"
+                            android:orientation="horizontal"
+                            android:padding="10dp">
 
                             <LinearLayout
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0"
-                                android:orientation="horizontal">
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:padding="5dp">
 
-                                <ImageView
-                                    android:id="@+id/imageView3"
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
-                                    android:layout_weight="0"
-                                    app:srcCompat="@drawable/ic_temp" />
-
-                                <TextView
-                                    android:id="@+id/tvTemp"
+                                <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
                                     android:layout_weight="0"
-                                    android:gravity="center"
-                                    android:text="+20℃"
-                                    android:textColor="#000000"
-                                    android:textSize="20sp" />
-                            </LinearLayout>
+                                    android:orientation="horizontal">
 
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0"
-                                android:orientation="horizontal">
+                                    <ImageView
+                                        android:id="@+id/imageView3"
+                                        android:layout_width="30dp"
+                                        android:layout_height="30dp"
+                                        android:layout_weight="0"
+                                        app:srcCompat="@drawable/ic_temp" />
 
-                                <ImageView
-                                    android:id="@+id/imageView4"
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
-                                    android:layout_weight="0"
-                                    app:srcCompat="@drawable/ic_person" />
+                                    <TextView
+                                        android:id="@+id/tvTemp"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:layout_weight="0"
+                                        android:gravity="center"
+                                        android:text="+20℃"
+                                        android:textColor="#000000"
+                                        android:textSize="20sp" />
+                                </LinearLayout>
 
-                                <TextView
-                                    android:id="@+id/tvFeelsLike"
+                                <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
                                     android:layout_weight="0"
-                                    android:gravity="center"
-                                    android:text="+20℃"
-                                    android:textColor="#000000"
-                                    android:textSize="20sp" />
-                            </LinearLayout>
+                                    android:orientation="horizontal">
 
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0"
-                                android:orientation="horizontal">
+                                    <ImageView
+                                        android:id="@+id/imageView4"
+                                        android:layout_width="30dp"
+                                        android:layout_height="30dp"
+                                        android:layout_weight="0"
+                                        app:srcCompat="@drawable/ic_person" />
 
-                                <ImageView
-                                    android:id="@+id/imageView5"
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
-                                    android:layout_weight="0"
-                                    app:srcCompat="@drawable/ic_wind" />
+                                    <TextView
+                                        android:id="@+id/tvFeelsLike"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:layout_weight="0"
+                                        android:gravity="center"
+                                        android:text="+20℃"
+                                        android:textColor="#000000"
+                                        android:textSize="20sp" />
+                                </LinearLayout>
 
-                                <TextView
-                                    android:id="@+id/tvWind"
+                                <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
                                     android:layout_weight="0"
-                                    android:gravity="center"
-                                    android:text="4м/c"
-                                    android:textColor="#000000"
-                                    android:textSize="20sp" />
-                            </LinearLayout>
+                                    android:orientation="horizontal">
 
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0"
-                                android:orientation="horizontal">
+                                    <ImageView
+                                        android:id="@+id/imageView5"
+                                        android:layout_width="30dp"
+                                        android:layout_height="30dp"
+                                        android:layout_weight="0"
+                                        app:srcCompat="@drawable/ic_wind" />
 
-                                <ImageView
-                                    android:id="@+id/imageView6"
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
-                                    android:layout_weight="0"
-                                    app:srcCompat="@drawable/ic_humidity" />
+                                    <TextView
+                                        android:id="@+id/tvWind"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:layout_weight="0"
+                                        android:gravity="center"
+                                        android:text="4м/c"
+                                        android:textColor="#000000"
+                                        android:textSize="20sp" />
+                                </LinearLayout>
 
-                                <TextView
-                                    android:id="@+id/tvHumidity"
+                                <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
                                     android:layout_weight="0"
-                                    android:gravity="center"
-                                    android:text="+20℃"
-                                    android:textColor="#000000"
-                                    android:textSize="20sp" />
+                                    android:orientation="horizontal">
+
+                                    <ImageView
+                                        android:id="@+id/imageView6"
+                                        android:layout_width="30dp"
+                                        android:layout_height="30dp"
+                                        android:layout_weight="0"
+                                        app:srcCompat="@drawable/ic_humidity" />
+
+                                    <TextView
+                                        android:id="@+id/tvHumidity"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:layout_weight="0"
+                                        android:gravity="center"
+                                        android:text="+20℃"
+                                        android:textColor="#000000"
+                                        android:textSize="20sp" />
+                                </LinearLayout>
+
                             </LinearLayout>
 
+                            <ImageView
+                                android:id="@+id/imageView2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:backgroundTint="#EDE6E6"
+                                app:srcCompat="@android:drawable/btn_star_big_on" />
                         </LinearLayout>
-
-                        <ImageView
-                            android:id="@+id/imageView2"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:backgroundTint="#EDE6E6"
-                            app:srcCompat="@android:drawable/btn_star_big_on" />
-                    </LinearLayout>
+                    </androidx.cardview.widget.CardView>
 
                     <TextView
                         android:id="@+id/tvDescription"
@@ -213,18 +218,53 @@
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="280dp"
             android:layout_margin="5dp"
-            android:layout_weight="1"
+            android:backgroundTint="#74DFFF"
             app:cardBackgroundColor="#FFFFFF"
             app:cardCornerRadius="20dp">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/RecycleForecast"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:orientation="horizontal" />
+                android:orientation="vertical">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:backgroundTint="#FFFFFF"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardCornerRadius="100dp">
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="4dp"
+                        android:gravity="center"
+                        android:text="Суточные прогнозы на 5 дней"
+                        android:textColor="#000000"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#67CFFF"
+                    app:cardMaxElevation="0dp">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/RecycleForecast"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal" />
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
 
         </androidx.cardview.widget.CardView>
     </LinearLayout>
